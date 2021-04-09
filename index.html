@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="UTF-8">
+
+<!-- MapLibre GL -->
+<!--  <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css" rel='stylesheet' />-->
+<!--  <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js"></script>-->
+<script src="https://cdn.maptiler.com/maplibre-gl-js/v1.13.0-rc.4/mapbox-gl.js"></script>
+<link
+        href="https://cdn.maptiler.com/maplibre-gl-js/v1.13.0-rc.4/mapbox-gl.css"
+        rel="stylesheet"
+/>
+
+<!-- jquery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- bootstrap -->
+<!--  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+<!-- local files -->
+
+<link rel="stylesheet" type="text/css" href="./style.css" />
+
+</head>
+
+<body>
+<div class="header">
+    <img src="assets/images/geovelo_text_icon.svg" alt="icon text">
+    <img src="assets/images/geovelo_logo.svg" style="height: 100px; padding-right: 10%;" alt="logo">
+    <h1>Geo Montfort</h1>
+</div>
+<div class="row">
+    <div class="col-md-3" style="padding-left:3%; padding-top:1%">
+        <div class="row">
+            <div>
+                <h3>Fond de plan</h3>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Immobilier</h3>
+        </div>
+        <div class="row">
+            <h3>Urbanisme</h3>
+        </div>
+        <div class="row">
+            <h3>Agriculture</h3>
+        </div>
+        <div class="row">
+            <h3>Prévention des risques</h3>
+        </div>
+        <div class="row">
+            <h3>Patrimoine local</h3>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div id='map' style='width: 100%; height: 800px;'></div>
+        <div id="state-legend" class="legend">
+            <h4 id="legend_title">Legende</h4>
+            that's legend
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    //Appel et configuration de la carte
+
+    var map = new mapboxgl.Map({
+        container: "map",
+        style:
+            "https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json", //Fond de carte
+        zoom: 15.3, // Zoom
+        center: [6.568, 45.489], // Centrage
+        pitch: 60, // Inclinaison
+        bearing: 150, // Rotation
+        minZoom: 14.5, // Zoom min
+    });
+</script>
+</html>
