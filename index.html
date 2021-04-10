@@ -19,8 +19,13 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
-<!-- local files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js'></script>
+<script type="text/javascript" src="https://unpkg.com/lodash@4.17.11/lodash.min.js"></script>
 
+
+<!-- local files -->
+<script type="text/javascript" src="./js/data.js"></script>
 <link rel="stylesheet" type="text/css" href="./style.css" />
 
 </head>
@@ -28,7 +33,7 @@
 <body>
 <div class="header">
     <img src="assets/images/geovelo_text_icon.svg" alt="icon text">
-    <img src="assets/images/geovelo_logo.svg" style="height: 100px; padding-right: 10%;" alt="logo">
+    <img src="assets/images/sig_logo.png" style="height: 100px; padding-right: 10%;" alt="logo">
     <h1>Geo Montfort</h1>
 </div>
 <div class="row">
@@ -77,5 +82,40 @@
         bearing: 150, // Rotation
         minZoom: 14.5, // Zoom min
     });
+
+    map.on('load', function(){
+
+        getSections('73253').then(function(data){
+            map.addSource("Sections", {
+                type: "geojson",
+                data: data
+            });
+            map.addLayer({
+                id: "Sections",
+                type: "fill",
+                source: "Sections",
+                paint: {
+                    'fill-color': '#0080ff', // blue color fill
+                    'fill-opacity': 0.5
+                },
+            });
+
+            // Add a symbol layer
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'Sections',
+                'layout': {
+                    'text-field': ['get', 'id'],
+                    'text-offset': [0, 1.25],
+                    'text-anchor': 'middle'
+                }
+            });
+        });
+
+
+    });
+
+
 </script>
 </html>
