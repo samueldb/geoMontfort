@@ -198,7 +198,7 @@
             });
         });
 
-        getHydrographie('45.48926,6.56835').then(function(data){
+        getHydrographie().then(function(data){
             map.addSource("Hydro", {
                 type: "geojson",
                 data: data
@@ -231,11 +231,58 @@
                     "text-color": "#8aa4e7"
                 }
             });
+        })
+            .then(function(){
+                var popup = new mapboxgl.Popup({
+                    className: "Mypopup",
+                    closeButton: false,
+                    closeOnClick: false });
+
+                map.on('mousemove', function(e) {
+                    var features = map.queryRenderedFeatures(e.point, { layers: ['Hydro_line'] });
+                    // Change the cursor style as a UI indicator.
+                    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+                    if (!features.length) {
+                        popup.remove();
+                        return; }
+
+                    var feature = features[0];
+                    popup.setLngLat(e.lngLat)
+                        .setHTML('<b>'+ feature.properties.nom + '</b>')
+                        .addTo(map);
+
+                });
+            });
+
+        getBati3D().then(function(data){
+            map.addSource("Bati3D", {
+                type: "geojson",
+                data: data
+            });
+            map.addLayer({
+                id: "Bati3D_layer",
+                type: "fill-extrusion",
+                source: "Bati3D",
+                paint: {
+                'fill-extrusion-color': '#A9A9A9',
+                'fill-extrusion-height':{'type': 'identity','property': 'HAUTEUR'},
+                'fill-extrusion-color': {
+                                        'property': 'HAUTEUR',
+                                            'stops': [
+                                            [5, '#1a9850'],
+                                            [7, '#91cf60'],
+                                            [9, '#d9ef8b'],
+                                            [12, '#ffffbf'],
+                                            [16, '#fee08b'],
+                                            [20, '#fc8d59'],
+                                            [30, '#d73027']]},
+                'fill-extrusion-opacity': 0.7,
+                'fill-extrusion-base': 0
+                }
+            });
         });
-
-
     });
-
 
 </script>
 </html>

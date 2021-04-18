@@ -9,6 +9,17 @@ function getRemoteGeoJson(url){
     })
 }
 
+function getLocalGeoJson(path){
+    return fetch(path).then(function(res){
+        if (res.ok){
+            return res.json();
+        }
+        else{
+            console.log("Impossible de récupérer les données demandées : " + response.status);
+        }
+    })
+}
+
 
 function getCadastreLayerFromStMarcel(layerName, codeCommune){
     var communesToGet = [codeCommune];
@@ -62,35 +73,14 @@ function getParcelles(codeCommune, idSection){
     })
 }
 
-function getHydrographie(center){
+function getHydrographie(){
     return getRemoteGeoJson('https://public.opendatasoft.com/api/records/1.0/search/?' +
                                     'dataset=hydrographie-cours-deau&q=' +
                                     '&clusterprecision=17' +
                                     '&rows=200' +
                                     '&facet=artif&facet=fictif&facet=franchisst&facet=nom&facet=pos_sol&facet=regime&facet=commune&facet=epci_name&facet=dep_name&facet=reg_name' +
-                                    // '&geofilter.distance='+center+',10000'+
         '&geofilter.polygon=(45.477,6.551),(45.477,6.609),(45.505, 6.609),(45.505,6.551),(45.477,6.551)'
     )
-        // [
-        // 6.550598144531249,
-        //     45.47722544469191
-        // ],
-        // [
-        //     6.609134674072266,
-        //     45.47722544469191
-        // ],
-        // [
-        //     6.609134674072266,
-        //     45.50219620881016
-        // ],
-        // [
-        //     6.550598144531249,
-        //     45.50219620881016
-        // ],
-        // [
-        //     6.550598144531249,
-        //     45.47722544469191
-        // ]
         .then(function(returnFeatures){
             var acc = returnFeatures.records.reduce(function (acc, feature) {
                     acc.push(
@@ -120,6 +110,9 @@ function getHydrographie(center){
     })
 }
 
+function getBati3D(){
+    return getLocalGeoJson('assets/data/bati_montfort.geojson')
+}
 
 function sortByLabel(features) {
     return _.sortBy(features, function (f) { return f.properties.label })
