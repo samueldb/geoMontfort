@@ -38,26 +38,83 @@
 </div>
 <div class="row">
     <div class="col-md-3" style="padding-left:3%; padding-top:1%">
-        <div class="row">
-            <div>
-                <h3>Fond de plan</h3>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h3>
+                        <button class="btn" data-toggle="collapse" data-target="#collapseFondDePlan" aria-expanded="true" aria-controls="collapseFondDePlan">
+                            Fond de plan
+                        </button>
+                    </h3>
+                </div>
+
+                <div id="collapseFondDePlan" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_sections">
+                            <label class="form-check-label" for="flexSwitchCheckDefault_sections">Sections</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_parcelles">
+                            <label class="form-check-label" for="flexSwitchCheckDefault_parcelles">Parcelles</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_hydro">
+                            <label class="form-check-label" for="flexSwitchCheckDefault_hydro">Hydrographie</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h3>
+                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseImmo" aria-expanded="false" aria-controls="collapseImmo">
+                            Immobilier
+                        </button>
+                    </h3>
+                </div>
+                <div id="collapseImmo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h3>
+                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseUrba" aria-expanded="false" aria-controls="collapseUrba">
+                            Urbanisme
+                        </button>
+                    </h3>
+                </div>
+                <div id="collapseUrba" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <h3>Immobilier</h3>
-        </div>
-        <div class="row">
-            <h3>Urbanisme</h3>
-        </div>
-        <div class="row">
-            <h3>Agriculture</h3>
-        </div>
-        <div class="row">
-            <h3>Prévention des risques</h3>
-        </div>
-        <div class="row">
-            <h3>Patrimoine local</h3>
-        </div>
+<!--        <div class="row">-->
+<!--            <div>-->
+<!--                <h3 data-toggle="collapse">Fond de plan</h3>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <h3>Immobilier</h3>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <h3>Urbanisme</h3>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <h3>Agriculture</h3>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <h3>Prévention des risques</h3>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <h3>Patrimoine local</h3>-->
+<!--        </div>-->
     </div>
 
     <div class="col-md-9">
@@ -92,11 +149,11 @@
             });
             map.addLayer({
                 id: "Sections",
-                type: "fill",
+                type: "line",
                 source: "Sections",
                 paint: {
-                    'fill-color': '#0080ff', // blue color fill
-                    'fill-opacity': 0.5
+                    'line-color':'#00AA00',
+                    'line-width':2
                 },
             });
 
@@ -107,8 +164,71 @@
                 'source': 'Sections',
                 'layout': {
                     'text-field': ['get', 'id'],
-                    'text-offset': [0, 1.25],
-                    'text-anchor': 'middle'
+                    'text-anchor': 'center'
+                }
+            });
+        });
+
+        getParcelles('73253').then(function(data){
+            map.addSource("Parcelles", {
+                type: "geojson",
+                data: data
+            });
+            map.addLayer({
+                id: "Parcelles_polygons",
+                type: "fill",
+                source: "Parcelles",
+                paint: {
+                    // 'fill-color':'#00AA00',
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)',
+                    'fill-opacity':0.1
+                    // 'line-width':2
+                },
+            });
+
+            // Add a symbol layer
+            map.addLayer({
+                'id': 'Parcelles_points',
+                'type': 'symbol',
+                'source': 'Sections',
+                'layout': {
+                    'text-field': ['get', 'numero'],
+                    'text-anchor': 'center'
+                }
+            });
+        });
+
+        getHydrographie('45.48926,6.56835').then(function(data){
+            map.addSource("Hydro", {
+                type: "geojson",
+                data: data
+            });
+            map.addLayer({
+                id: "Hydro_line",
+                type: "line",
+                source: "Hydro",
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color':'#0d2f58',
+                    'line-width':8
+                },
+            });
+
+            // Add a symbol layer
+            map.addLayer({
+                'id': 'Hydro_points',
+                'type': 'symbol',
+                'source': 'Hydro',
+                'layout': {
+                    'text-field': ['get', 'nom'],
+                    'text-anchor': 'center',
+                    "symbol-placement": "line",
+                },
+                paint: {
+                    "text-color": "#8aa4e7"
                 }
             });
         });

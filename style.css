@@ -20,7 +20,7 @@ h1 {
 }
 
 h3 {
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
     color: rgba(64, 64, 64, 0.87);
     size: 10em;
     width: 100%;
@@ -28,14 +28,14 @@ h3 {
 }
 
 .btn {
-    background-color: #4caf50;
-    border-color: white;
+    /*background-color: #4caf50;*/
+    /*border-color: white;*/
     margin-left:5%;
 }
 
 .btn-popup {
-    background-color: #4caf50;
-    border-color: white;
+    /*background-color: #4caf50;*/
+    /*border-color: white;*/
     font-size: 1em;
 }
 
