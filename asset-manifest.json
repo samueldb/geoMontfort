@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/geomontfort/static/css/main.a617e044.chunk.css",
+    "main.js": "/geomontfort/static/js/main.f10fe235.chunk.js",
+    "main.js.map": "/geomontfort/static/js/main.f10fe235.chunk.js.map",
+    "runtime-main.js": "/geomontfort/static/js/runtime-main.a84f34f5.js",
+    "runtime-main.js.map": "/geomontfort/static/js/runtime-main.a84f34f5.js.map",
+    "static/js/2.6a0306f3.chunk.js": "/geomontfort/static/js/2.6a0306f3.chunk.js",
+    "static/js/2.6a0306f3.chunk.js.map": "/geomontfort/static/js/2.6a0306f3.chunk.js.map",
+    "static/js/3.b2575186.chunk.js": "/geomontfort/static/js/3.b2575186.chunk.js",
+    "static/js/3.b2575186.chunk.js.map": "/geomontfort/static/js/3.b2575186.chunk.js.map",
+    "index.html": "/geomontfort/index.html",
+    "static/css/main.a617e044.chunk.css.map": "/geomontfort/static/css/main.a617e044.chunk.css.map",
+    "static/js/2.6a0306f3.chunk.js.LICENSE.txt": "/geomontfort/static/js/2.6a0306f3.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/geomontfort/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a84f34f5.js",
+    "static/js/2.6a0306f3.chunk.js",
+    "static/css/main.a617e044.chunk.css",
+    "static/js/main.f10fe235.chunk.js"
+  ]
+}
