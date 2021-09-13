@@ -55,7 +55,7 @@ function getSections(codeCommune){
             var labelPrefix = f.properties.commune === codeCommune ? f.properties.prefixe : f.properties.commune.substr(2)
             f.properties.label = `${labelPrefix} ${f.properties.code}`
         });
-        return {type: 'FeatureCollection', features: sortByLabel(features)}
+        return features
     })
 }
 

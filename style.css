@@ -9,7 +9,7 @@
 }
 
 .header {
-    background: #4caf50;
+    background: cadetblue;
     color: rgba(255,255,255,.87);
     /* float: left; */
 }
@@ -28,9 +28,10 @@ h3 {
 }
 
 .btn {
-    /*background-color: #4caf50;*/
-    /*border-color: white;*/
-    margin-left:5%;
+    background: none;
+    display: block;
+    margin-left:2%;
+    text-align: left;
 }
 
 .btn-popup {
@@ -42,6 +43,10 @@ h3 {
 .btn-popup:hover{
     box-sizing: border-box;
     background-color: #007BFF;
+}
+
+.card-header{
+    background: #5f9ea094; /* cadetblue with opacity; */
 }
 
 .legend {

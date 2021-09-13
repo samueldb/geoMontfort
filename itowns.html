@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Globe</title>
+    <style type="text/css">
+        html { height: 100%; }
+        body { margin: 0; overflow: hidden; height: 100%; }
+        #viewerDiv { margin: auto; height: 100%; width: 100%; padding: 0; }
+        canvas { display: block }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+    <!-- jquery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- bootstrap -->
+    <!--  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js'></script>
+    <script type="text/javascript" src="https://unpkg.com/lodash@4.17.11/lodash.min.js"></script>
+
+
+    <!-- local files -->
+    <script type="text/javascript" src="js/data.js"></script>
+    <script type="text/javascript" src="js/elevation.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+</head>
+<body>
+<div class="header">
+    <img src="assets/images/geovelo_text_icon.svg" alt="icon text">
+    <img src="assets/images/sig_logo.png" style="height: 100px; padding-right: 10%;" alt="logo">
+    <h1>Geo Montfort</h1>
+</div>
+<div class="row">
+    <div class="col-md-3" style="padding-left:3%; padding-top:1%">
+        <div id="accordion">
+            <!--            <div class="card">-->
+            <!--                <div class="card-header" id="headingOne">-->
+            <!--                        <button class="btn btn-block" data-toggle="collapse" data-target="#collapseFondDePlan" aria-expanded="true" aria-controls="collapseFondDePlan">-->
+            <!--                            Fond de plan-->
+            <!--                        </button>-->
+            <!--                </div>-->
+
+            <!--                <div id="collapseFondDePlan" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">-->
+            <!--                    <div class="card-body">-->
+            <!--                        <div class="form-check form-switch">-->
+            <!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_sections">-->
+            <!--                            <label class="form-check-label" for="flexSwitchCheckDefault_sections">Sections</label>-->
+            <!--                        </div>-->
+            <!--                        <div class="form-check form-switch">-->
+            <!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_parcelles">-->
+            <!--                            <label class="form-check-label" for="flexSwitchCheckDefault_parcelles">Parcelles</label>-->
+            <!--                        </div>-->
+            <!--                        <div class="form-check form-switch">-->
+            <!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_bati3D">-->
+            <!--                            <label class="form-check-label" for="flexSwitchCheckDefault_bati3D">Bati 3D</label>-->
+            <!--                        </div>-->
+            <!--                        <div class="form-check form-switch">-->
+            <!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_hydro">-->
+            <!--                            <label class="form-check-label" for="flexSwitchCheckDefault_hydro">Hydrographie</label>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="card">-->
+            <!--                <div class="card-header" id="headingTwo">-->
+
+            <!--                        <button class="btn btn-block collapsed" data-toggle="collapse" data-target="#collapseImmo" aria-expanded="false" aria-controls="collapseImmo">-->
+            <!--                            Immobilier-->
+            <!--                        </button>-->
+
+            <!--                </div>-->
+            <!--                <div id="collapseImmo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">-->
+            <!--                    <div class="card-body">-->
+            <!--                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="card">-->
+            <!--                <div class="card-header" id="headingThree">-->
+
+            <!--                        <button class="btn btn-block collapsed" data-toggle="collapse" data-target="#collapseUrba" aria-expanded="false" aria-controls="collapseUrba">-->
+            <!--                            Urbanisme-->
+            <!--                        </button>-->
+
+            <!--                </div>-->
+            <!--                <div id="collapseUrba" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">-->
+            <!--                    <div class="card-body">-->
+            <!--                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+    </div>
+
+    <div class="col-md-9">
+<!--        <div id='map' style='width: 100%; height: 800px;'></div>-->
+        <div id="viewerDiv" style='width: 100%; height: 800px;'></div>
+        <div id="state-legend" class="legend">
+            <h4 id="legend_title">Legende</h4>
+            that's legend
+        </div>
+    </div>
+</div>
+
+<script src="js/itowns/itowns.js"></script>
+<script src="js/itowns/debug.js"></script>
+<script src="js/GUI/GuiTools.js"></script>
+<script type="text/javascript">
+    // Define initial camera position
+    var positionOnGlobe = {
+        coord: new itowns.Coordinates('EPSG:4326', 6.568, 45.489),
+        range: 2000,
+        heading:180,
+        tilt:17
+    }
+
+    var viewerDiv = document.getElementById('viewerDiv');
+
+    // Instanciate iTowns GlobeView*
+    var view = new itowns.GlobeView(viewerDiv, positionOnGlobe);
+    var menuGlobe = new GuiTools('menuDiv', view);
+
+    // Add one imagery layer to the scene
+    // This layer is defined in a json file but it could be defined as a plain js
+    // object. See Layer* for more info.
+    // itowns.Fetcher.json('http://www.itowns-project.org/itowns/examples/layers/JSONLayers/Ortho.json').then(function _(config) {
+    //     config.source = new itowns.WMTSSource(config.source);
+    //     var layer = new itowns.ColorLayer('Ortho', config);
+    //     view.addLayer(layer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+    // });
+
+    var colorSource = new itowns.WMTSSource({
+        url: 'http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
+        crs: 'EPSG:3857',
+        name: 'ORTHOIMAGERY.ORTHOPHOTOS',
+        tileMatrixSet: 'PM',
+        format: 'image/jpeg'
+    });
+
+    var colorLayer = new itowns.ColorLayer('Ortho', {
+        source: colorSource,
+    });
+
+    view.addLayer(colorLayer);
+
+    // Add elevation layer.
+    // These will deform iTowns globe geometry to represent terrain elevation.
+
+    // itowns.Fetcher.json('http://www.itowns-project.org/itowns/examples/layers/JSONLayers/IGN_MNT.json').then(addElevationLayerFromConfig);
+    addElevationLayerFromIGN();
+
+    // getSections('73235').then(function(data){
+    //
+    // });
+
+    var promises = [];
+    var sectionSource;
+    // promises.push(itowns.Fetcher.json('https://cadastre.data.gouv.fr/bundler/cadastre-etalab/communes/73253/geojson/sections')
+    //     .then(function(data){
+    //         return itowns.GeoJsonParser.parse(data, {
+    //             in:{
+    //                 crs: 'EPSG:4326',
+    //                 isInverted: false
+    //             },
+    //             out:{
+    //                 crs: 'EPSG:4326',
+    //                 mergeFeatures: false,
+    //                 filteringExtent: false,
+    //                 buildExtent: false,
+    //                 structure: '2d'
+    //             }
+    //         });
+    //         })
+    // .then(function(parsedData){
+    //     sectionSource = new itowns.FileSource({
+    //         parsedData
+    //     });
+    //
+    // }));
+
+    // itowns.Fetcher.json('https://cadastre.data.gouv.fr/bundler/cadastre-etalab/communes/73253/geojson/sections')
+    // .then(function(json){
+    //     const source = new itowns.FileSource({
+    //         fetchedData: json,
+    //         crs: 'EPSG:4326',
+    //         parser: itowns.GeoJsonParser.parse
+    //     });
+    //     const layer = new itowns.ColorLayer('sections', {
+    //         name: 'Sections Montfort',
+    //         transparent: true,
+    //         source: source,
+    //     });
+    //     return addColorLayer('section', source, '#00AA00');
+    // })
+
+    var geometrySource = new itowns.WFSSource({
+        url: 'http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
+        typeName: 'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
+        crs: 'EPSG:4326',
+    });
+
+    var geometryLayer = new itowns.GeometryLayer('Buildings', new itowns.THREE.Group(), {
+        source: geometrySource,
+        update: itowns.FeatureProcessing.update,
+        convert: itowns.Feature2Mesh.convert({
+            altitude: setAltitude,
+            extrude: setExtrusion,
+            color: setColor
+        }),
+        zoom: { min: 14 },
+    });
+
+    view.addLayer(geometryLayer);
+
+    // var sectionSource = new itowns.FileSource({
+    //     url: 'https://cadastre.data.gouv.fr/bundler/cadastre-etalab/communes/73253/geojson/sections',
+    //     crs: 'EPSG:4326',
+    //     fetcher: itowns.Fetcher.geojson,
+    //     parser: itowns.GeoJsonParser.parse
+    // });
+    // var sectionStyle = new itowns.Style({
+    //     transparent:true,
+    //     opacity:0.5,
+    //     color: new itowns.THREE.Color(),
+    // });
+    //
+    // var sections = new itowns.ColorLayer('sections',{
+    //     name: 'sections',
+    //     transparent: true,
+    //     source: sectionSource,
+    //     style:sectionStyle
+    // })
+    //
+    // view.addLayer(sections);
+    // Add a geometry layer, which will contain the multipolygon to display
+    // var sections = new itowns.GeometryLayer('Sections', new itowns.THREE.Group(), {
+    //     // Use a FileSource to load a single file once
+    //     source: new itowns.FileSource({
+    //         url: 'https://cadastre.data.gouv.fr/bundler/cadastre-etalab/communes/73253/geojson/sections',
+    //         crs: 'EPSG:4326',
+    //         format: 'application/json',
+    //
+    //     }),
+    //     // zoom: { min: 10 },
+    // });
+    // sections.update = itowns.FeatureProcessing.update;
+    // sections.convert = itowns.Feature2Mesh.convert({
+    //     color: new itowns.THREE.Color('#00AA00'),
+    //     // extrude: 50
+    // });
+    // sections.transparent = true;
+    // sections.opacity = 0.7;
+
+
+    // view.addLayer(sections).then(function menu(layer) {
+    //     var gui = debug.GeometryDebug.createGeometryDebugUI(menuGlobe.gui, view, layer);
+    //     debug.GeometryDebug.addWireFrameCheckbox(gui, view, layer);
+    // });
+
+</script>
+</body>
+</html>

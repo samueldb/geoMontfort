@@ -26,6 +26,7 @@
 
 <!-- local files -->
 <script type="text/javascript" src="./js/data.js"></script>
+<script type="text/javascript" src="./js/menu.js"></script>
 <link rel="stylesheet" type="text/css" href="./style.css" />
 
 </head>
@@ -39,82 +40,63 @@
 <div class="row">
     <div class="col-md-3" style="padding-left:3%; padding-top:1%">
         <div id="accordion">
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                    <h3>
-                        <button class="btn" data-toggle="collapse" data-target="#collapseFondDePlan" aria-expanded="true" aria-controls="collapseFondDePlan">
-                            Fond de plan
-                        </button>
-                    </h3>
-                </div>
+<!--            <div class="card">-->
+<!--                <div class="card-header" id="headingOne">-->
+<!--                        <button class="btn btn-block" data-toggle="collapse" data-target="#collapseFondDePlan" aria-expanded="true" aria-controls="collapseFondDePlan">-->
+<!--                            Fond de plan-->
+<!--                        </button>-->
+<!--                </div>-->
 
-                <div id="collapseFondDePlan" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_sections">
-                            <label class="form-check-label" for="flexSwitchCheckDefault_sections">Sections</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_parcelles">
-                            <label class="form-check-label" for="flexSwitchCheckDefault_parcelles">Parcelles</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_hydro">
-                            <label class="form-check-label" for="flexSwitchCheckDefault_hydro">Hydrographie</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h3>
-                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseImmo" aria-expanded="false" aria-controls="collapseImmo">
-                            Immobilier
-                        </button>
-                    </h3>
-                </div>
-                <div id="collapseImmo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                    <h3>
-                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseUrba" aria-expanded="false" aria-controls="collapseUrba">
-                            Urbanisme
-                        </button>
-                    </h3>
-                </div>
-                <div id="collapseUrba" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                </div>
-            </div>
-        </div>
-<!--        <div class="row">-->
-<!--            <div>-->
-<!--                <h3 data-toggle="collapse">Fond de plan</h3>-->
-
+<!--                <div id="collapseFondDePlan" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="form-check form-switch">-->
+<!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_sections">-->
+<!--                            <label class="form-check-label" for="flexSwitchCheckDefault_sections">Sections</label>-->
+<!--                        </div>-->
+<!--                        <div class="form-check form-switch">-->
+<!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_parcelles">-->
+<!--                            <label class="form-check-label" for="flexSwitchCheckDefault_parcelles">Parcelles</label>-->
+<!--                        </div>-->
+<!--                        <div class="form-check form-switch">-->
+<!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_bati3D">-->
+<!--                            <label class="form-check-label" for="flexSwitchCheckDefault_bati3D">Bati 3D</label>-->
+<!--                        </div>-->
+<!--                        <div class="form-check form-switch">-->
+<!--                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_hydro">-->
+<!--                            <label class="form-check-label" for="flexSwitchCheckDefault_hydro">Hydrographie</label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 <!--            </div>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <h3>Immobilier</h3>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <h3>Urbanisme</h3>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <h3>Agriculture</h3>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <h3>Prévention des risques</h3>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <h3>Patrimoine local</h3>-->
-<!--        </div>-->
+<!--            <div class="card">-->
+<!--                <div class="card-header" id="headingTwo">-->
+
+<!--                        <button class="btn btn-block collapsed" data-toggle="collapse" data-target="#collapseImmo" aria-expanded="false" aria-controls="collapseImmo">-->
+<!--                            Immobilier-->
+<!--                        </button>-->
+
+<!--                </div>-->
+<!--                <div id="collapseImmo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">-->
+<!--                    <div class="card-body">-->
+<!--                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card">-->
+<!--                <div class="card-header" id="headingThree">-->
+
+<!--                        <button class="btn btn-block collapsed" data-toggle="collapse" data-target="#collapseUrba" aria-expanded="false" aria-controls="collapseUrba">-->
+<!--                            Urbanisme-->
+<!--                        </button>-->
+
+<!--                </div>-->
+<!--                <div id="collapseUrba" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">-->
+<!--                    <div class="card-body">-->
+<!--                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
     </div>
 
     <div class="col-md-9">
@@ -127,8 +109,13 @@
 </div>
 </body>
 <script>
+
+    // Création du menu :
+    fillMenus();
+
     //Appel et configuration de la carte
 
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtdWVsZGIiLCJhIjoiY2lzc2t4a3RnMDAwYTJ5bnplNjBiYXg4dyJ9.D9yc49jOivEKLDNmFaqIeg';
     var map = new mapboxgl.Map({
         container: "map",
         style:
@@ -141,8 +128,27 @@
     });
 
     map.on('load', function(){
+        map.addSource('mapbox-dem', {
+            'type': 'raster-dem',
+            'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+            'tileSize': 512,
+            'maxzoom': 14
+        });
+        // add the DEM source as a terrain layer with exaggerated height
+        map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
 
-        getSections('73253').then(function(data){
+        // add a sky layer that will show when the map is highly pitched
+        map.addLayer({
+            'id': 'sky',
+            'type': 'sky',
+            'paint': {
+                'sky-type': 'atmosphere',
+                'sky-atmosphere-sun': [0.0, 0.0],
+                'sky-atmosphere-sun-intensity': 15
+            }
+        });
+        
+    getSections('73253').then(function(data){
             map.addSource("Sections", {
                 type: "geojson",
                 data: data
