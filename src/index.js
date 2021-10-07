@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './index.css';
-import App from './App';
-import Map from './Map';
 import reportWebVitals from './reportWebVitals';
+import App from './components/App';
 
 ReactDOM.render(
   <React.StrictMode>
