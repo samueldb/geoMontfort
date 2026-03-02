@@ -14,6 +14,9 @@ import MapGL, {
 import '../styles/Map.css';
 
 const MAPTILER_KEY = process.env.REACT_APP_MAPTILER_KEY;
+const PMTILES_REMOTE_URL =
+  process.env.REACT_APP_PMTILES_URL ||
+  'http://[2a01:e0a:c47:7be0:7ed5:ec0f:2230:689]:8080/jovet.pmtiles';
 
 const Map = forwardRef(function Map(
   { mode, onViewChange, onViewportChange, layerVisibility },
@@ -28,7 +31,7 @@ const Map = forwardRef(function Map(
   const modernMapLayerId = 'carte-moderne-layer';
   const isModernLayerVisible = Boolean(layerVisibility?.carte_moderne);
   const pmtilesProtocolRef = useRef(null);
-  const pmtilesArchiveUrl = `pmtiles://${window.location.origin}${process.env.PUBLIC_URL || ''}/data/jovet.pmtiles`;
+  const pmtilesArchiveUrl = `pmtiles://${PMTILES_REMOTE_URL}`;
   const terrainTileJsonUrl = MAPTILER_KEY
     ? `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`
     : null;
