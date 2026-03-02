@@ -1,0 +1,43 @@
+name: Deploy GeoMontfort site
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
+      - name: Preserve preview-site from current gh-pages branch
+        run: |
+          if git clone --depth 1 --branch gh-pages "https://github.com/${{ github.repository }}.git" gh-pages-current; then
+            if [ -d gh-pages-current/preview-site ]; then
+              cp -R gh-pages-current/preview-site build/preview-site
+            fi
+          fi
+
+      - name: Deploy to GitHub Pages root
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: build
