@@ -2,7 +2,6 @@ import React, { useMemo, useRef, useState } from 'react';
 import Map from './Map';
 import Menu from './Menu';
 import { allLayers } from '../data/LayersList';
-import sigLogo from '../assets/images/sig_logo.png';
 import sigLogoMontfort from '../assets/images/siglogoMontfort.png';
 import '../styles/App.css';
 

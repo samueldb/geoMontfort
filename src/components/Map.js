@@ -1,5 +1,6 @@
 import React, {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -13,7 +14,7 @@ import MapGL, {
 } from 'react-map-gl/maplibre';
 import '../styles/Map.css';
 
-const MAPTILER_KEY = process.env.REACT_APP_MAPTILER_KEY;
+const MAPTILER_KEY = (process.env.REACT_APP_MAPTILER_KEY || '').replace(/^['"]|['"]$/g, '');
 const PMTILES_REMOTE_URL =
   process.env.REACT_APP_PMTILES_URL ||
   'http://[2a01:e0a:c47:7be0:7ed5:ec0f:2230:689]:8080/jovet.pmtiles';
@@ -53,8 +54,8 @@ const Map = forwardRef(function Map(
     });
   };
 
-  const applyTerrainMode = (map, nextMode) => {
-    if (!terrainTileJsonUrl || !map || !map.getSource(hillshadeSourceId)) {
+  const applyTerrainMode = useCallback((map, nextMode) => {
+    if (!map || !map.getSource(hillshadeSourceId)) {
       return;
     }
 
@@ -71,9 +72,9 @@ const Map = forwardRef(function Map(
       // Keep navigation usable even if terrain source fails.
       map.setTerrain(null);
     }
-  };
+  }, []);
 
-  const applyViewMode = (nextMode) => {
+  const applyViewMode = useCallback((nextMode) => {
     const map = mapComponentRef.current?.getMap();
     if (!map) {
       return;
@@ -87,7 +88,7 @@ const Map = forwardRef(function Map(
 
     map.easeTo({ pitch: 58, bearing: 150, duration: 700 });
     map.once('moveend', () => applyTerrainMode(map, '3d'));
-  };
+  }, [applyTerrainMode]);
 
   useImperativeHandle(ref, () => ({
     zoomIn: () => mapComponentRef.current?.getMap()?.zoomIn(),
@@ -123,7 +124,7 @@ const Map = forwardRef(function Map(
 
   useEffect(() => {
     applyViewMode(mode);
-  }, [mode]);
+  }, [mode, applyViewMode]);
 
   useEffect(() => {
     if (!mapRef.current || !mapRef.current.getLayer(modernMapLayerId)) {
@@ -140,9 +141,24 @@ const Map = forwardRef(function Map(
   }, [isModernLayerVisible, modernMapLayerId]);
 
   const handleMapLoad = (event) => {
-    mapRef.current = event.target;
-    setBaseMapVisibility(event.target, !modernVisibilityRef.current);
-    applyTerrainMode(event.target, mode);
+    const map = event.target;
+    mapRef.current = map;
+    setBaseMapVisibility(map, !modernVisibilityRef.current);
+
+    if (map.getSource(hillshadeSourceId)) {
+      applyTerrainMode(map, mode);
+      return;
+    }
+
+    const onSourceData = (sourceEvent) => {
+      if (sourceEvent.sourceId !== hillshadeSourceId || !map.getSource(hillshadeSourceId)) {
+        return;
+      }
+      map.off('sourcedata', onSourceData);
+      applyTerrainMode(map, mode);
+    };
+
+    map.on('sourcedata', onSourceData);
   };
 
   const handleMove = (event) => {
