@@ -26,6 +26,9 @@ jobs:
       - name: Build app
         run: npm run build
 
+      - name: Ensure hidden files exist for Pages publish
+        run: touch build/.nojekyll
+
       - name: Preserve preview-site from current gh-pages branch
         run: |
           if git clone --depth 1 --branch gh-pages "https://github.com/${{ github.repository }}.git" gh-pages-current; then

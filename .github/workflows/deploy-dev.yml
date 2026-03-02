@@ -25,6 +25,9 @@ jobs:
       - name: Build app
         run: npm run build
 
+      - name: Ensure hidden files exist for Pages publish
+        run: touch build/.nojekyll
+
       - name: Publish preview to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
