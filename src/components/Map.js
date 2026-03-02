@@ -1,70 +1,219 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
+import maplibregl from 'maplibre-gl';
+import { Protocol } from 'pmtiles';
+import MapGL, {
+  AttributionControl,
+  Layer,
+  Source,
+} from 'react-map-gl/maplibre';
 import '../styles/Map.css';
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+const MAPTILER_KEY = process.env.REACT_APP_MAPTILER_KEY;
 
-const Map = () => {
-  const mapContainerRef = useRef(null);
+const Map = forwardRef(function Map(
+  { mode, onViewChange, onViewportChange, layerVisibility },
+  ref
+) {
+  const mapRef = useRef(null);
+  const mapComponentRef = useRef(null);
+  const modernVisibilityRef = useRef(false);
+  const hillshadeSourceId = 'hillshade-dem-source';
+  const hillshadeLayerId = 'terrain-hillshade-layer';
+  const modernMapSourceId = 'carte-moderne-source';
+  const modernMapLayerId = 'carte-moderne-layer';
+  const isModernLayerVisible = Boolean(layerVisibility?.carte_moderne);
+  const pmtilesProtocolRef = useRef(null);
+  const pmtilesArchiveUrl = `pmtiles://${window.location.origin}${process.env.PUBLIC_URL || ''}/data/jovet.pmtiles`;
+  const terrainTileJsonUrl = MAPTILER_KEY
+    ? `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`
+    : null;
 
-  const [lng, setLng] = useState(6.568);
-  const [lat, setLat] = useState(45.489);
-  const [zoom, setZoom] = useState(15.3);
-  const [pitch, setPitch] = useState(60); // centrage
-  const [bearing, setBearing] = useState(150); // rotation
+  const setBaseMapVisibility = (map, visible) => {
+    const styleLayers = map.getStyle()?.layers || [];
+    styleLayers.forEach((layer) => {
+      if (
+        layer.id === modernMapLayerId ||
+        layer.id === 'sky' ||
+        layer.id === hillshadeLayerId
+      ) {
+        return;
+      }
 
-  // Initialize map when component mounts
+      if (map.getLayer(layer.id)) {
+        map.setLayoutProperty(layer.id, 'visibility', visible ? 'visible' : 'none');
+      }
+    });
+  };
+
+  const applyTerrainMode = (map, nextMode) => {
+    if (!terrainTileJsonUrl || !map || !map.getSource(hillshadeSourceId)) {
+      return;
+    }
+
+    try {
+      if (nextMode === '3d') {
+        map.setTerrain({
+          source: hillshadeSourceId,
+          exaggeration: 1.1,
+        });
+      } else {
+        map.setTerrain(null);
+      }
+    } catch (error) {
+      // Keep navigation usable even if terrain source fails.
+      map.setTerrain(null);
+    }
+  };
+
+  const applyViewMode = (nextMode) => {
+    const map = mapComponentRef.current?.getMap();
+    if (!map) {
+      return;
+    }
+
+    if (nextMode === '2d') {
+      applyTerrainMode(map, '2d');
+      map.easeTo({ pitch: 0, bearing: 0, duration: 700 });
+      return;
+    }
+
+    map.easeTo({ pitch: 58, bearing: 150, duration: 700 });
+    map.once('moveend', () => applyTerrainMode(map, '3d'));
+  };
+
+  useImperativeHandle(ref, () => ({
+    zoomIn: () => mapComponentRef.current?.getMap()?.zoomIn(),
+    zoomOut: () => mapComponentRef.current?.getMap()?.zoomOut(),
+    locateUser: () => {
+      const map = mapComponentRef.current?.getMap();
+      if (!map || !navigator.geolocation) {
+        return;
+      }
+      navigator.geolocation.getCurrentPosition((position) => {
+        map.flyTo({
+          center: [position.coords.longitude, position.coords.latitude],
+          zoom: 15,
+          speed: 0.8,
+        });
+      });
+    },
+  }));
+
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      // style: 'mapbox://styles/mapbox/streets-v11',
-      style:  'https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json', //Fond de carte
-      center: [lng, lat],
-      zoom: zoom,
-      pitch: pitch,
-      bearing: bearing
+    modernVisibilityRef.current = isModernLayerVisible;
+  }, [isModernLayerVisible]);
+
+  useEffect(() => {
+    const protocol = new Protocol();
+    pmtilesProtocolRef.current = protocol;
+    maplibregl.addProtocol('pmtiles', protocol.tile);
+
+    return () => {
+      maplibregl.removeProtocol('pmtiles');
+    };
+  }, []);
+
+  useEffect(() => {
+    applyViewMode(mode);
+  }, [mode]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(modernMapLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      modernMapLayerId,
+      'visibility',
+      isModernLayerVisible ? 'visible' : 'none'
+    );
+
+    setBaseMapVisibility(mapRef.current, !isModernLayerVisible);
+  }, [isModernLayerVisible, modernMapLayerId]);
+
+  const handleMapLoad = (event) => {
+    mapRef.current = event.target;
+    setBaseMapVisibility(event.target, !modernVisibilityRef.current);
+    applyTerrainMode(event.target, mode);
+  };
+
+  const handleMove = (event) => {
+    const { viewState } = event;
+    onViewportChange({
+      lng: viewState.longitude.toFixed(4),
+      lat: viewState.latitude.toFixed(4),
+      zoom: viewState.zoom.toFixed(2),
+      altitude: Math.max(650, Math.round(700 + viewState.pitch * 2.1)).toString(),
     });
-
-    map.on('load', function(){
-      map.addSource('mapbox-dem', {
-          'type': 'raster-dem',
-          'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-          'tileSize': 512,
-          'maxzoom': 14
-      });
-      // add the DEM source as a terrain layer with exaggerated height
-      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
-
-      // add a sky layer that will show when the map is highly pitched
-      map.addLayer({
-          'id': 'sky',
-          'type': 'sky',
-          'paint': {
-              'sky-type': 'atmosphere',
-              'sky-atmosphere-sun': [0.0, 0.0],
-              'sky-atmosphere-sun-intensity': 15
-          }
-      });
-    });
-
-    // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-    map.on('move', () => {
-      setLng(map.getCenter().lng.toFixed(4));
-      setLat(map.getCenter().lat.toFixed(4));
-      setZoom(map.getZoom().toFixed(2));
-      setPitch(map.getPitch().toFixed(2));
-      setBearing(map.getBearing().toFixed(2));
-    });
-
-    // Clean up on unmount
-    return () => map.remove();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  };
 
   return (
-      <div className='map-container' ref={mapContainerRef} />
+    <MapGL
+      attributionControl={false}
+      initialViewState={{
+        longitude: 6.568,
+        latitude: 45.489,
+        zoom: 15.3,
+        pitch: mode === '2d' ? 0 : 60,
+        bearing: mode === '2d' ? 0 : 150,
+      }}
+      mapStyle='https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json'
+      maxPitch={85}
+      onLoad={handleMapLoad}
+      onMove={handleMove}
+      ref={mapComponentRef}
+      style={{ position: 'absolute', inset: 0 }}
+    >
+      <AttributionControl compact position='bottom-left' />
+
+      {terrainTileJsonUrl && (
+        <Source
+          id={hillshadeSourceId}
+          encoding='mapbox'
+          url={terrainTileJsonUrl}
+          type='raster-dem'
+        >
+          <Layer
+            id={hillshadeLayerId}
+            layout={{
+              visibility: mode === '3d' ? 'visible' : 'none',
+            }}
+            paint={{
+              'hillshade-exaggeration': 1.2,
+              'hillshade-shadow-color': '#3f321f',
+              'hillshade-highlight-color': '#faf2df',
+              'hillshade-accent-color': '#5a4a2d',
+            }}
+            type='hillshade'
+          />
+        </Source>
+      )}
+
+      <Source
+        id={modernMapSourceId}
+        url={pmtilesArchiveUrl}
+        type='raster'
+        tileSize={256}
+      >
+        <Layer
+          id={modernMapLayerId}
+          layout={{
+            visibility: isModernLayerVisible ? 'visible' : 'none',
+          }}
+          paint={{
+            'raster-opacity': 1,
+            'raster-resampling': 'nearest',
+          }}
+          type='raster'
+        />
+      </Source>
+    </MapGL>
   );
-};
+});
 
 export default Map;

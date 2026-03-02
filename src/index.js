@@ -1,14 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import { createRoot } from 'react-dom/client';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import reportWebVitals from './reportWebVitals';
 import App from './components/App';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
     <React.Fragment><App /></React.Fragment>
   </React.StrictMode>,
-  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
