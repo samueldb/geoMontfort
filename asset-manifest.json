@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/geomontfort/static/css/main.a5c862e8.chunk.css",
-    "main.js": "/geomontfort/static/js/main.8bbac62c.chunk.js",
-    "main.js.map": "/geomontfort/static/js/main.8bbac62c.chunk.js.map",
-    "runtime-main.js": "/geomontfort/static/js/runtime-main.cc2c1602.js",
-    "runtime-main.js.map": "/geomontfort/static/js/runtime-main.cc2c1602.js.map",
-    "static/css/2.9345dda6.chunk.css": "/geomontfort/static/css/2.9345dda6.chunk.css",
-    "static/js/2.16cd9eb4.chunk.js": "/geomontfort/static/js/2.16cd9eb4.chunk.js",
-    "static/js/2.16cd9eb4.chunk.js.map": "/geomontfort/static/js/2.16cd9eb4.chunk.js.map",
-    "static/js/3.4da18ce6.chunk.js": "/geomontfort/static/js/3.4da18ce6.chunk.js",
-    "static/js/3.4da18ce6.chunk.js.map": "/geomontfort/static/js/3.4da18ce6.chunk.js.map",
+    "main.css": "/geomontfort/static/css/main.e42fddd3.chunk.css",
+    "main.js": "/geomontfort/static/js/main.9d41ed7a.chunk.js",
+    "main.js.map": "/geomontfort/static/js/main.9d41ed7a.chunk.js.map",
+    "runtime-main.js": "/geomontfort/static/js/runtime-main.48818576.js",
+    "runtime-main.js.map": "/geomontfort/static/js/runtime-main.48818576.js.map",
+    "static/css/2.e01802a3.chunk.css": "/geomontfort/static/css/2.e01802a3.chunk.css",
+    "static/js/2.75dc9fb1.chunk.js": "/geomontfort/static/js/2.75dc9fb1.chunk.js",
+    "static/js/2.75dc9fb1.chunk.js.map": "/geomontfort/static/js/2.75dc9fb1.chunk.js.map",
+    "static/js/3.77b95c99.chunk.js": "/geomontfort/static/js/3.77b95c99.chunk.js",
+    "static/js/3.77b95c99.chunk.js.map": "/geomontfort/static/js/3.77b95c99.chunk.js.map",
     "index.html": "/geomontfort/index.html",
-    "static/css/2.9345dda6.chunk.css.map": "/geomontfort/static/css/2.9345dda6.chunk.css.map",
-    "static/css/main.a5c862e8.chunk.css.map": "/geomontfort/static/css/main.a5c862e8.chunk.css.map",
-    "static/js/2.16cd9eb4.chunk.js.LICENSE.txt": "/geomontfort/static/js/2.16cd9eb4.chunk.js.LICENSE.txt",
-    "static/media/logo.6ce24c58.svg": "/geomontfort/static/media/logo.6ce24c58.svg"
+    "static/css/2.e01802a3.chunk.css.map": "/geomontfort/static/css/2.e01802a3.chunk.css.map",
+    "static/css/main.e42fddd3.chunk.css.map": "/geomontfort/static/css/main.e42fddd3.chunk.css.map",
+    "static/js/2.75dc9fb1.chunk.js.LICENSE.txt": "/geomontfort/static/js/2.75dc9fb1.chunk.js.LICENSE.txt",
+    "static/media/siglogoMontfort.2e64afa8.png": "/geomontfort/static/media/siglogoMontfort.2e64afa8.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.cc2c1602.js",
-    "static/css/2.9345dda6.chunk.css",
-    "static/js/2.16cd9eb4.chunk.js",
-    "static/css/main.a5c862e8.chunk.css",
-    "static/js/main.8bbac62c.chunk.js"
+    "static/js/runtime-main.48818576.js",
+    "static/css/2.e01802a3.chunk.css",
+    "static/js/2.75dc9fb1.chunk.js",
+    "static/css/main.e42fddd3.chunk.css",
+    "static/js/main.9d41ed7a.chunk.js"
   ]
 }
