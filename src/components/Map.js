@@ -17,7 +17,7 @@ import '../styles/Map.css';
 const MAPTILER_KEY = (process.env.REACT_APP_MAPTILER_KEY || '').replace(/^['"]|['"]$/g, '');
 const PMTILES_REMOTE_URL =
   process.env.REACT_APP_PMTILES_URL ||
-  'http://[2a01:e0a:c47:7be0:7ed5:ec0f:2230:689]:8080/jovet.pmtiles';
+  'https://tiles.montfortvo.net:33443/jovet.pmtiles';
 
 const Map = forwardRef(function Map(
   { mode, onViewChange, onViewportChange, layerVisibility },
