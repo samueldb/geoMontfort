@@ -35,6 +35,11 @@ const MNT_WMTS_URL = process.env.REACT_APP_MNT_WMTS_URL ||
   'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM_0_18&FORMAT=image%2Fpng&LAYER=IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}';
 const SARDE_TILESET_ID = process.env.REACT_APP_SARDE_TILESET_ID || 'samueldb.5agbtq27';
 const NAPO_TILESET_ID = process.env.REACT_APP_NAPO_TILESET_ID || 'samueldb.2w36gjhb';
+const MAP_ATTRIBUTIONS = [
+  '© IGN',
+  '© OpenStreetMap contributors',
+  '© SDB'
+];
 
 const Map = forwardRef(function Map(
   { mode, onViewChange, onViewportChange, layerVisibility, layerOpacities = {} },
@@ -331,7 +336,7 @@ const Map = forwardRef(function Map(
       ref={mapComponentRef}
       style={{ position: 'absolute', inset: 0 }}
     >
-      <AttributionControl position='bottom-right' />
+      <AttributionControl customAttribution={MAP_ATTRIBUTIONS} position='bottom-right' />
 
       {terrainTileJsonUrl && (
         <Source
