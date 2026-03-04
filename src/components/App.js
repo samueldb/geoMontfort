@@ -5,10 +5,14 @@ import { allLayers } from '../data/LayersList';
 import sigLogoMontfort from '../assets/images/logo_GeoMontfort.png';
 import '../styles/App.css';
 
+const FOREST_LEGEND_URL =
+  'https://data.geopf.fr/annexes/ressources/legendes/LANDCOVER.FORESTINVENTORY.V2-legend.png';
+
 function App() {
   const mapRef = useRef(null);
   const [viewMode, setViewMode] = useState('2d');
   const [showWorkPopup, setShowWorkPopup] = useState(false);
+  const [showForestLegend, setShowForestLegend] = useState(false);
   const [coords, setCoords] = useState({
     lng: '6.5680',
     lat: '45.4890',
@@ -26,11 +30,23 @@ function App() {
   );
 
   const [layerVisibility, setLayerVisibility] = useState(initialLayerState);
+  const [layerOpacities, setLayerOpacities] = useState(() =>
+    allLayers.reduce((acc, layer) => {
+      acc[layer.name] = 1;
+      return acc;
+    }, {})
+  );
 
   const toggleLayer = (layerName) => {
     setLayerVisibility((current) => ({
       ...current,
       [layerName]: !current[layerName],
+    }));
+  };
+  const setLayerOpacity = (layerName, opacity) => {
+    setLayerOpacities((current) => ({
+      ...current,
+      [layerName]: opacity,
     }));
   };
   const openWorkPopup = () => setShowWorkPopup(true);
@@ -65,6 +81,9 @@ function App() {
         <aside className='websig-sidebar vintage-texture'>
           <Menu
             layerVisibility={layerVisibility}
+            layerOpacities={layerOpacities}
+            onLayerOpacityChange={setLayerOpacity}
+            onToggleForestLegend={() => setShowForestLegend((current) => !current)}
             onToggleLayer={toggleLayer}
             onShowWorkPopup={openWorkPopup}
             allLayers={allLayers}
@@ -82,6 +101,7 @@ function App() {
           <Map
             ref={mapRef}
             layerVisibility={layerVisibility}
+            layerOpacities={layerOpacities}
             mode={viewMode}
             onViewChange={setViewMode}
             onViewportChange={setCoords}
@@ -119,6 +139,11 @@ function App() {
                 2D
               </button>
             </div>
+            {showForestLegend && (
+              <div className='floating-legend-panel vintage-texture'>
+                <img alt='Légende carte forestière' src={FOREST_LEGEND_URL} />
+              </div>
+            )}
           </div>
 
           <div className='coord-badge vintage-texture'>
@@ -129,10 +154,10 @@ function App() {
             <span>Zoom: {coords.zoom}</span>
           </div>
 
-          <div className='legend-card vintage-texture'>
-            <div><i className='dot wet' /> Zones humides</div>
-            <div><i className='dot risk' /> Risque avalanche</div>
-          </div>
+          {/*<div className='legend-card vintage-texture'>*/}
+          {/*  <div><i className='dot wet' /> Zones humides</div>*/}
+          {/*  <div><i className='dot risk' /> Risque avalanche</div>*/}
+          {/*</div>*/}
 
           <article className='parcel-card vintage-texture'>
             <h3>Parcelle ndeg128-B</h3>

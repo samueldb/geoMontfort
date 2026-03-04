@@ -15,12 +15,29 @@ import MapGL, {
 import '../styles/Map.css';
 
 const MAPTILER_KEY = (process.env.REACT_APP_MAPTILER_KEY || '').replace(/^['"]|['"]$/g, '');
+const MAPBOX_TOKEN = (
+  process.env.REACT_APP_MAPBOX_TOKEN ||
+  process.env.REACT_APP_MAPBOX_ACCESS_TOKEN ||
+  ''
+).replace(/^['"]|['"]$/g, '');
 const PMTILES_REMOTE_URL =
   process.env.REACT_APP_PMTILES_URL ||
   'https://tiles.montfortvo.net/jovet.pmtiles';
+const ADMIN_SECTIONS_WMTS_URL = process.env.REACT_APP_ADMIN_SECTIONS_WMTS_URL ||
+  'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image%2Fpng&LAYER=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}';
+const AERIAL_WMTS_URL = process.env.REACT_APP_AERIAL_WMTS_URL ||
+  'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image%2Fjpeg&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}';
+const AERIAL_1952_WMTS_URL = process.env.REACT_APP_AERIAL_1952_WMTS_URL ||
+  'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image%2Fpng&LAYER=ORTHOIMAGERY.ORTHOPHOTOS.1950-1965&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}';
+const FOREST_WMTS_URL = process.env.REACT_APP_FOREST_WMTS_URL ||
+  'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image%2Fpng&LAYER=LANDCOVER.FORESTINVENTORY.V2&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}';
+const MNT_WMTS_URL = process.env.REACT_APP_MNT_WMTS_URL ||
+  'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM_0_18&FORMAT=image%2Fpng&LAYER=IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}';
+const SARDE_TILESET_ID = process.env.REACT_APP_SARDE_TILESET_ID || 'samueldb.5agbtq27';
+const NAPO_TILESET_ID = process.env.REACT_APP_NAPO_TILESET_ID || 'samueldb.2w36gjhb';
 
 const Map = forwardRef(function Map(
-  { mode, onViewChange, onViewportChange, layerVisibility },
+  { mode, onViewChange, onViewportChange, layerVisibility, layerOpacities = {} },
   ref
 ) {
   const mapRef = useRef(null);
@@ -28,23 +45,65 @@ const Map = forwardRef(function Map(
   const modernVisibilityRef = useRef(false);
   const hillshadeSourceId = 'hillshade-dem-source';
   const hillshadeLayerId = 'terrain-hillshade-layer';
+  const adminSectionsSourceId = 'admin-sections-source';
+  const adminSectionsRasterLayerId = 'admin-sections-raster-layer';
   const modernMapSourceId = 'carte-moderne-source';
   const modernMapLayerId = 'carte-moderne-layer';
+  const aerialSourceId = 'aerial-source';
+  const aerialRasterLayerId = 'aerial-raster-layer';
+  const aerial1952SourceId = 'aerial-1952-source';
+  const aerial1952RasterLayerId = 'aerial-1952-raster-layer';
+  const forestSourceId = 'forest-source';
+  const forestRasterLayerId = 'forest-raster-layer';
+  const mntSourceId = 'mnt-source';
+  const mntRasterLayerId = 'mnt-raster-layer';
+  const sardeSourceId = 'sarde-source';
+  const sardeRasterLayerId = 'sarde-raster-layer';
+  const napoSourceId = 'napo-source';
+  const napoRasterLayerId = 'napo-raster-layer';
   const isModernLayerVisible = Boolean(layerVisibility?.carte_moderne);
+  const isAdminSectionsLayerVisible = Boolean(layerVisibility?.admin_sections);
+  const isAerialLayerVisible = Boolean(layerVisibility?.aerial);
+  const isAerial1952LayerVisible = Boolean(layerVisibility?.aerial_1952);
+  const isForestLayerVisible = Boolean(layerVisibility?.forest);
+  const isMntLayerVisible = Boolean(layerVisibility?.mnt);
+  const isSardeLayerVisible = Boolean(layerVisibility?.sarde);
+  const isNapoLayerVisible = Boolean(layerVisibility?.napo);
   const pmtilesProtocolRef = useRef(null);
   const pmtilesArchiveUrl = `pmtiles://${PMTILES_REMOTE_URL}`;
+  const sardeTilesUrl = MAPBOX_TOKEN
+    ? `https://api.mapbox.com/v4/${SARDE_TILESET_ID}/{z}/{x}/{y}.png?access_token=${MAPBOX_TOKEN}`
+    : null;
+  const napoTilesUrl = MAPBOX_TOKEN
+    ? `https://api.mapbox.com/v4/${NAPO_TILESET_ID}/{z}/{x}/{y}.png?access_token=${MAPBOX_TOKEN}`
+    : null;
   const terrainTileJsonUrl = MAPTILER_KEY
     ? `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`
     : null;
+  const getLayerOpacity = (layerName, baseOpacity = 1) => {
+    const layerOpacity = layerOpacities[layerName];
+    if (typeof layerOpacity !== 'number') {
+      return baseOpacity;
+    }
+    return Math.max(0, Math.min(1, baseOpacity * layerOpacity));
+  };
 
   const setBaseMapVisibility = (map, visible) => {
     const styleLayers = map.getStyle()?.layers || [];
+    const appManagedLayerIds = new Set([
+      modernMapLayerId,
+      adminSectionsRasterLayerId,
+      aerialRasterLayerId,
+      aerial1952RasterLayerId,
+      forestRasterLayerId,
+      mntRasterLayerId,
+      sardeRasterLayerId,
+      napoRasterLayerId,
+      hillshadeLayerId,
+      'sky',
+    ]);
     styleLayers.forEach((layer) => {
-      if (
-        layer.id === modernMapLayerId ||
-        layer.id === 'sky' ||
-        layer.id === hillshadeLayerId
-      ) {
+      if (appManagedLayerIds.has(layer.id)) {
         return;
       }
 
@@ -140,6 +199,90 @@ const Map = forwardRef(function Map(
     setBaseMapVisibility(mapRef.current, !isModernLayerVisible);
   }, [isModernLayerVisible, modernMapLayerId]);
 
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(adminSectionsRasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      adminSectionsRasterLayerId,
+      'visibility',
+      isAdminSectionsLayerVisible ? 'visible' : 'none'
+    );
+  }, [isAdminSectionsLayerVisible, adminSectionsRasterLayerId]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(aerialRasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      aerialRasterLayerId,
+      'visibility',
+      isAerialLayerVisible ? 'visible' : 'none'
+    );
+  }, [isAerialLayerVisible, aerialRasterLayerId]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(aerial1952RasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      aerial1952RasterLayerId,
+      'visibility',
+      isAerial1952LayerVisible ? 'visible' : 'none'
+    );
+  }, [isAerial1952LayerVisible, aerial1952RasterLayerId]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(forestRasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      forestRasterLayerId,
+      'visibility',
+      isForestLayerVisible ? 'visible' : 'none'
+    );
+  }, [isForestLayerVisible, forestRasterLayerId]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(mntRasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      mntRasterLayerId,
+      'visibility',
+      isMntLayerVisible ? 'visible' : 'none'
+    );
+  }, [isMntLayerVisible, mntRasterLayerId]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(sardeRasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      sardeRasterLayerId,
+      'visibility',
+      isSardeLayerVisible ? 'visible' : 'none'
+    );
+  }, [isSardeLayerVisible, sardeRasterLayerId]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.getLayer(napoRasterLayerId)) {
+      return;
+    }
+
+    mapRef.current.setLayoutProperty(
+      napoRasterLayerId,
+      'visibility',
+      isNapoLayerVisible ? 'visible' : 'none'
+    );
+  }, [isNapoLayerVisible, napoRasterLayerId]);
+
   const handleMapLoad = (event) => {
     const map = event.target;
     mapRef.current = map;
@@ -173,7 +316,7 @@ const Map = forwardRef(function Map(
 
   return (
     <MapGL
-      attributionControl={false}
+      attributionControl={true}
       initialViewState={{
         longitude: 6.568,
         latitude: 45.489,
@@ -188,7 +331,7 @@ const Map = forwardRef(function Map(
       ref={mapComponentRef}
       style={{ position: 'absolute', inset: 0 }}
     >
-      <AttributionControl compact position='bottom-left' />
+      <AttributionControl position='bottom-right' />
 
       {terrainTileJsonUrl && (
         <Source
@@ -203,7 +346,7 @@ const Map = forwardRef(function Map(
               visibility: mode === '3d' ? 'visible' : 'none',
             }}
             paint={{
-              'hillshade-exaggeration': 1.2,
+              'hillshade-exaggeration': 1,
               'hillshade-shadow-color': '#3f321f',
               'hillshade-highlight-color': '#faf2df',
               'hillshade-accent-color': '#5a4a2d',
@@ -225,12 +368,149 @@ const Map = forwardRef(function Map(
             visibility: isModernLayerVisible ? 'visible' : 'none',
           }}
           paint={{
-            'raster-opacity': 1,
+            'raster-opacity': getLayerOpacity('carte_moderne', 1),
             'raster-resampling': 'nearest',
           }}
           type='raster'
         />
       </Source>
+
+      <Source
+        id={adminSectionsSourceId}
+        tiles={[ADMIN_SECTIONS_WMTS_URL]}
+        tileSize={256}
+        type='raster'
+      >
+        <Layer
+          id={adminSectionsRasterLayerId}
+          layout={{
+            visibility: isAdminSectionsLayerVisible ? 'visible' : 'none',
+          }}
+          paint={{
+            'raster-opacity': getLayerOpacity('admin_sections', 1),
+            'raster-resampling': 'nearest',
+          }}
+          type='raster'
+        />
+      </Source>
+
+      <Source
+        id={aerialSourceId}
+        tiles={[AERIAL_WMTS_URL]}
+        tileSize={256}
+        type='raster'
+      >
+        <Layer
+          id={aerialRasterLayerId}
+          layout={{
+            visibility: isAerialLayerVisible ? 'visible' : 'none',
+          }}
+          paint={{
+            'raster-opacity': getLayerOpacity('aerial', 1),
+            'raster-resampling': 'nearest',
+          }}
+          type='raster'
+        />
+      </Source>
+
+      <Source
+        id={aerial1952SourceId}
+        tiles={[AERIAL_1952_WMTS_URL]}
+        tileSize={256}
+        type='raster'
+      >
+        <Layer
+          id={aerial1952RasterLayerId}
+          layout={{
+            visibility: isAerial1952LayerVisible ? 'visible' : 'none',
+          }}
+          paint={{
+            'raster-opacity': getLayerOpacity('aerial_1952', 1),
+            'raster-resampling': 'nearest',
+          }}
+          type='raster'
+        />
+      </Source>
+
+      <Source
+        id={forestSourceId}
+        tiles={[FOREST_WMTS_URL]}
+        tileSize={256}
+        type='raster'
+      >
+        <Layer
+          id={forestRasterLayerId}
+          layout={{
+            visibility: isForestLayerVisible ? 'visible' : 'none',
+          }}
+          paint={{
+            'raster-opacity': getLayerOpacity('forest', 1),
+            'raster-resampling': 'nearest',
+          }}
+          type='raster'
+        />
+      </Source>
+
+      <Source
+        id={mntSourceId}
+        tiles={[MNT_WMTS_URL]}
+        tileSize={256}
+        type='raster'
+      >
+        <Layer
+          id={mntRasterLayerId}
+          layout={{
+            visibility: isMntLayerVisible ? 'visible' : 'none',
+          }}
+          paint={{
+            'raster-opacity': getLayerOpacity('mnt', 0.9),
+            'raster-resampling': 'nearest',
+          }}
+          type='raster'
+        />
+      </Source>
+
+      {sardeTilesUrl && (
+        <Source
+          id={sardeSourceId}
+          tiles={[sardeTilesUrl]}
+          tileSize={256}
+          type='raster'
+        >
+          <Layer
+            id={sardeRasterLayerId}
+            layout={{
+              visibility: isSardeLayerVisible ? 'visible' : 'none',
+            }}
+            paint={{
+              'raster-opacity': getLayerOpacity('sarde', 0.85),
+              'raster-resampling': 'nearest',
+            }}
+            type='raster'
+          />
+        </Source>
+      )}
+
+      {napoTilesUrl && (
+        <Source
+          id={napoSourceId}
+          tiles={[napoTilesUrl]}
+          tileSize={256}
+          type='raster'
+        >
+          <Layer
+            id={napoRasterLayerId}
+            layout={{
+              visibility: isNapoLayerVisible ? 'visible' : 'none',
+            }}
+            paint={{
+              'raster-opacity': getLayerOpacity('napo', 0.85),
+              'raster-resampling': 'nearest',
+            }}
+            type='raster'
+          />
+        </Source>
+      )}
     </MapGL>
   );
 });

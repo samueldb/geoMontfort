@@ -1,4 +1,13 @@
-function Menu({ allLayers, layerVisibility, onToggleLayer, onShowWorkPopup }) {
+function Menu({
+  allLayers,
+  layerVisibility,
+  layerOpacities,
+  onLayerOpacityChange,
+  onToggleForestLegend,
+  onToggleLayer,
+  onShowWorkPopup,
+}) {
+  const interactiveLayers = new Set(['admin_sections', 'carte_moderne', 'aerial', 'aerial_1952', 'forest', 'mnt', 'sarde', 'napo']);
   const groupedLayers = allLayers.reduce((acc, layer) => {
     if (!acc[layer.categorie]) {
       acc[layer.categorie] = [];
@@ -9,6 +18,7 @@ function Menu({ allLayers, layerVisibility, onToggleLayer, onShowWorkPopup }) {
 
   const categoryLabels = {
     admin: 'Cadastre',
+    historical: 'Cartes historiques',
     landscapes: 'Paysages',
   };
 
@@ -22,26 +32,75 @@ function Menu({ allLayers, layerVisibility, onToggleLayer, onShowWorkPopup }) {
           <ul>
             {layers.map((layer) => {
               const isVisible = Boolean(layerVisibility[layer.name]);
-              const isModernLayer = layer.name === 'carte_moderne';
+              const isInteractiveLayer = interactiveLayers.has(layer.name);
+              const isUnavailable = !isInteractiveLayer && !isVisible;
               const handleLayerClick = () => {
-                if (!isVisible && !isModernLayer) {
+                if (!isVisible && !isInteractiveLayer) {
                   onShowWorkPopup();
                   return;
                 }
                 onToggleLayer(layer.name);
               };
+              const layerItemClassName = [
+                'layer-item',
+                isVisible ? 'active' : '',
+                isUnavailable ? 'unavailable' : '',
+              ].filter(Boolean).join(' ');
               return (
                 <li key={layer.name}>
                   <button
-                    className={isVisible ? 'layer-item active' : 'layer-item'}
+                    className={layerItemClassName}
                     onClick={handleLayerClick}
                     type='button'
                   >
-                    <span>{layer.displayable_name}</span>
+                    <span className='layer-label'>
+                      {layer.displayable_name}
+                      {layer.name === 'forest' && (
+                        <span className='layer-info-wrap'>
+                          <span
+                            aria-label='Afficher la légende forestière'
+                            className='layer-info-icon'
+                            onKeyDown={(event) => {
+                              if (event.key !== 'Enter' && event.key !== ' ') {
+                                return;
+                              }
+                              event.preventDefault();
+                              event.stopPropagation();
+                              onToggleForestLegend();
+                            }}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              onToggleForestLegend();
+                            }}
+                            role='button'
+                            tabIndex={0}
+                          >
+                            i
+                          </span>
+                        </span>
+                      )}
+                    </span>
                     <span className='visibility-pill'>
                       {isVisible ? 'Visible' : 'Activer'}
                     </span>
                   </button>
+                  {isInteractiveLayer && isVisible && (
+                    <div className='layer-opacity-row'>
+                      <span>Opacité</span>
+                      <input
+                        aria-label={`Opacité ${layer.displayable_name}`}
+                        max='100'
+                        min='0'
+                        onChange={(event) =>
+                          onLayerOpacityChange(layer.name, Number(event.target.value) / 100)
+                        }
+                        type='range'
+                        value={Math.round((layerOpacities[layer.name] ?? 1) * 100)}
+                      />
+                      <strong>{Math.round((layerOpacities[layer.name] ?? 1) * 100)}%</strong>
+                    </div>
+                  )}
                 </li>
               );
             })}
