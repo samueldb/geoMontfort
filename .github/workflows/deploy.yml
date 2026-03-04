@@ -23,6 +23,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Validate build secrets
+        env:
+          REACT_APP_MAPBOX_ACCESS_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
+          REACT_APP_MAPTILER_KEY: ${{ secrets.REACT_APP_MAPTILER_KEY }}
+        run: |
+          test -n "$REACT_APP_MAPBOX_ACCESS_TOKEN" || (echo "Missing secret: REACT_APP_MAPBOX_ACCESS_TOKEN" && exit 1)
+          test -n "$REACT_APP_MAPTILER_KEY" || (echo "Missing secret: REACT_APP_MAPTILER_KEY" && exit 1)
+
       - name: Build app
         env:
           REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
