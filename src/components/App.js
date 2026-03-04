@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import Map from './Map';
 import Menu from './Menu';
 import { allLayers } from '../data/LayersList';
-import sigLogoMontfort from '../assets/images/siglogoMontfort.png';
+import sigLogoMontfort from '../assets/images/logo_GeoMontfort.png';
 import '../styles/App.css';
 
 function App() {
