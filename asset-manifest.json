@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/geoMontfort/static/css/main.e42fddd3.chunk.css",
-    "main.js": "/geoMontfort/static/js/main.6033b34b.chunk.js",
-    "main.js.map": "/geoMontfort/static/js/main.6033b34b.chunk.js.map",
-    "runtime-main.js": "/geoMontfort/static/js/runtime-main.9e281f77.js",
-    "runtime-main.js.map": "/geoMontfort/static/js/runtime-main.9e281f77.js.map",
-    "static/css/2.e01802a3.chunk.css": "/geoMontfort/static/css/2.e01802a3.chunk.css",
-    "static/js/2.7611bd56.chunk.js": "/geoMontfort/static/js/2.7611bd56.chunk.js",
-    "static/js/2.7611bd56.chunk.js.map": "/geoMontfort/static/js/2.7611bd56.chunk.js.map",
-    "static/js/3.77b95c99.chunk.js": "/geoMontfort/static/js/3.77b95c99.chunk.js",
-    "static/js/3.77b95c99.chunk.js.map": "/geoMontfort/static/js/3.77b95c99.chunk.js.map",
-    "index.html": "/geoMontfort/index.html",
-    "static/css/2.e01802a3.chunk.css.map": "/geoMontfort/static/css/2.e01802a3.chunk.css.map",
-    "static/css/main.e42fddd3.chunk.css.map": "/geoMontfort/static/css/main.e42fddd3.chunk.css.map",
-    "static/js/2.7611bd56.chunk.js.LICENSE.txt": "/geoMontfort/static/js/2.7611bd56.chunk.js.LICENSE.txt",
-    "static/media/siglogoMontfort.2e64afa8.png": "/geoMontfort/static/media/siglogoMontfort.2e64afa8.png"
+    "main.css": "/static/css/main.e42fddd3.chunk.css",
+    "main.js": "/static/js/main.736e095e.chunk.js",
+    "main.js.map": "/static/js/main.736e095e.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.8c1b1067.js",
+    "runtime-main.js.map": "/static/js/runtime-main.8c1b1067.js.map",
+    "static/css/2.e01802a3.chunk.css": "/static/css/2.e01802a3.chunk.css",
+    "static/js/2.cfd53a33.chunk.js": "/static/js/2.cfd53a33.chunk.js",
+    "static/js/2.cfd53a33.chunk.js.map": "/static/js/2.cfd53a33.chunk.js.map",
+    "static/js/3.77b95c99.chunk.js": "/static/js/3.77b95c99.chunk.js",
+    "static/js/3.77b95c99.chunk.js.map": "/static/js/3.77b95c99.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.e01802a3.chunk.css.map": "/static/css/2.e01802a3.chunk.css.map",
+    "static/css/main.e42fddd3.chunk.css.map": "/static/css/main.e42fddd3.chunk.css.map",
+    "static/js/2.cfd53a33.chunk.js.LICENSE.txt": "/static/js/2.cfd53a33.chunk.js.LICENSE.txt",
+    "static/media/siglogoMontfort.2e64afa8.png": "/static/media/siglogoMontfort.2e64afa8.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.9e281f77.js",
+    "static/js/runtime-main.8c1b1067.js",
     "static/css/2.e01802a3.chunk.css",
-    "static/js/2.7611bd56.chunk.js",
+    "static/js/2.cfd53a33.chunk.js",
     "static/css/main.e42fddd3.chunk.css",
-    "static/js/main.6033b34b.chunk.js"
+    "static/js/main.736e095e.chunk.js"
   ]
 }
