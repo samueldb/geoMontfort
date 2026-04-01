@@ -559,3 +559,81 @@
     display: none;
   }
 }
+
+.lidar-settings-panel {
+  margin-top: 0.45rem;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.58);
+  display: grid;
+  gap: 0.55rem;
+}
+
+.lidar-settings-header {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--sage-deep);
+}
+
+.lidar-setting-field {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.lidar-setting-field > span,
+.lidar-checkbox-row span {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.lidar-setting-field select {
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.48rem 0.55rem;
+}
+
+.lidar-setting-inline {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.lidar-setting-inline input[type='range'] {
+  width: 100%;
+}
+
+.lidar-setting-inline strong {
+  min-width: 2.8rem;
+  text-align: right;
+  font-size: 0.74rem;
+}
+
+.lidar-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+
+.lidar-preset-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.lidar-preset-row button {
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.45rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}

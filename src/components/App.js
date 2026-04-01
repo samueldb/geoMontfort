@@ -8,10 +8,32 @@ import '../styles/App.css';
 const FOREST_LEGEND_URL =
   'https://data.geopf.fr/annexes/ressources/legendes/LANDCOVER.FORESTINVENTORY.V2-legend.png';
 
+const DEFAULT_LIDAR_RENDER_SETTINGS = {
+  pointSize: 20,
+  colorMode: 'classification',
+  sseThreshold: 2,
+  enableEDL: true,
+  edlStrength: 0.45,
+  edlRadius: 1.2,
+};
+
+const LIDAR_RENDER_PRESETS = {
+  demo: {
+    pointSize: 2,
+    colorMode: 'classification',
+    sseThreshold: 8,
+    enableEDL: true,
+    edlStrength: 0.35,
+    edlRadius: 1,
+  },
+  dense: DEFAULT_LIDAR_RENDER_SETTINGS,
+};
+
 function App() {
   const mapRef = useRef(null);
   const [viewMode, setViewMode] = useState('2d');
   const [showWorkPopup, setShowWorkPopup] = useState(false);
+  const [showLidarProfileCard, setShowLidarProfileCard] = useState(false);
   const [showForestLegend, setShowForestLegend] = useState(false);
   const [coords, setCoords] = useState({
     lng: '6.5680',
@@ -36,6 +58,7 @@ function App() {
       return acc;
     }, {})
   );
+  const [lidarRenderSettings, setLidarRenderSettings] = useState(DEFAULT_LIDAR_RENDER_SETTINGS);
 
   const toggleLayer = (layerName) => {
     setLayerVisibility((current) => ({
@@ -43,12 +66,29 @@ function App() {
       [layerName]: !current[layerName],
     }));
   };
+
   const setLayerOpacity = (layerName, opacity) => {
     setLayerOpacities((current) => ({
       ...current,
       [layerName]: opacity,
     }));
   };
+
+  const setLidarRenderSetting = (key, value) => {
+    setLidarRenderSettings((current) => ({
+      ...current,
+      [key]: value,
+    }));
+  };
+
+  const applyLidarPreset = (presetName) => {
+    const preset = LIDAR_RENDER_PRESETS[presetName];
+    if (!preset) {
+      return;
+    }
+    setLidarRenderSettings(preset);
+  };
+
   const openWorkPopup = () => setShowWorkPopup(true);
 
   return (
@@ -80,13 +120,17 @@ function App() {
       <div className='websig-body'>
         <aside className='websig-sidebar vintage-texture'>
           <Menu
-            layerVisibility={layerVisibility}
+            allLayers={allLayers}
             layerOpacities={layerOpacities}
+            layerVisibility={layerVisibility}
+            lidarRenderSettings={lidarRenderSettings}
             onLayerOpacityChange={setLayerOpacity}
+            onApplyLidarPreset={applyLidarPreset}
+            onLidarRenderSettingChange={setLidarRenderSetting}
+            onShowLidarProfileCard={() => setShowLidarProfileCard(true)}
+            onShowWorkPopup={openWorkPopup}
             onToggleForestLegend={() => setShowForestLegend((current) => !current)}
             onToggleLayer={toggleLayer}
-            onShowWorkPopup={openWorkPopup}
-            allLayers={allLayers}
           />
 
           <div className='sidebar-footer'>
@@ -102,9 +146,12 @@ function App() {
             ref={mapRef}
             layerVisibility={layerVisibility}
             layerOpacities={layerOpacities}
+            lidarRenderSettings={lidarRenderSettings}
             mode={viewMode}
             onViewChange={setViewMode}
+            onHideLidarProfileCard={() => setShowLidarProfileCard(false)}
             onViewportChange={setCoords}
+            showLidarProfileCard={showLidarProfileCard}
           />
 
           <div className='floating-controls'>
@@ -154,11 +201,6 @@ function App() {
             <span>Zoom: {coords.zoom}</span>
           </div>
 
-          {/*<div className='legend-card vintage-texture'>*/}
-          {/*  <div><i className='dot wet' /> Zones humides</div>*/}
-          {/*  <div><i className='dot risk' /> Risque avalanche</div>*/}
-          {/*</div>*/}
-
           <article className='parcel-card vintage-texture'>
             <h3>Parcelle ndeg128-B</h3>
             <p>Quartier des Bionnassay, 74170 Saint-Gervais</p>
@@ -184,11 +226,11 @@ function App() {
           role='presentation'
         >
           <div
+            aria-labelledby='work-popin-title'
+            aria-modal='true'
             className='work-popin-card vintage-texture'
             onClick={(event) => event.stopPropagation()}
             role='dialog'
-            aria-modal='true'
-            aria-labelledby='work-popin-title'
           >
             <h4 id='work-popin-title'>Travaux en cours</h4>
             <p>Cette fonctionnalite sera disponible prochainement.</p>

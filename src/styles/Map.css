@@ -17,3 +17,186 @@
   background: rgba(255, 255, 255, 0.76) !important;
   backdrop-filter: blur(3px);
 }
+
+.profile-tool-card {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 9;
+  width: min(320px, calc(100% - 2rem));
+  border: 1px solid rgba(23, 207, 38, 0.22);
+  border-radius: 0.9rem;
+  box-shadow: 0 10px 24px rgba(18, 36, 24, 0.18);
+  padding: 0.85rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.profile-tool-header {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: #0f9a1b;
+}
+
+.profile-tool-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.profile-tool-close {
+  border: 1px solid rgba(15, 154, 27, 0.22);
+  background: rgba(255, 255, 255, 0.78);
+  color: #0f9a1b;
+  border-radius: 0.55rem;
+  width: 2rem;
+  height: 1.8rem;
+  line-height: 1;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-tool-button {
+  border: 0;
+  border-radius: 0.65rem;
+  background: #132b18;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.58rem 0.8rem;
+  cursor: pointer;
+}
+
+.profile-tool-button.secondary {
+  background: rgba(19, 43, 24, 0.08);
+  color: #1d2b20;
+  border: 1px solid rgba(19, 43, 24, 0.16);
+}
+
+.profile-tool-button.active {
+  background: #0b6bdb;
+}
+
+.profile-buffer-field {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.profile-buffer-field span,
+.profile-tool-help {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: rgba(29, 43, 32, 0.78);
+}
+
+.profile-buffer-inline {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.profile-panel {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9;
+  width: min(680px, calc(100% - 2rem));
+  border: 1px solid rgba(23, 207, 38, 0.22);
+  border-radius: 1rem;
+  box-shadow: 0 14px 30px rgba(18, 36, 24, 0.2);
+  padding: 0.8rem;
+}
+
+.profile-panel-header,
+.profile-panel-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.profile-panel-header div,
+.profile-panel-footer span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.profile-panel-header strong,
+.profile-panel-footer span {
+  font-size: 0.74rem;
+}
+
+.profile-panel-header span {
+  font-size: 0.68rem;
+  opacity: 0.75;
+}
+
+.profile-measure-readout {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #6a1f29;
+  min-height: 1.2rem;
+}
+
+.profile-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.35rem 0 0.35rem;
+}
+
+.profile-axis-label {
+  font-size: 11px;
+  fill: rgba(29, 43, 32, 0.75);
+}
+
+.profile-axis-title {
+  font-size: 12px;
+  fill: #1d2b20;
+  font-weight: 700;
+}
+
+
+.profile-measure-guide {
+  stroke: rgba(209, 73, 91, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.profile-measure-line {
+  stroke: #d1495b;
+  stroke-width: 2.4;
+}
+
+.profile-measure-tag {
+  fill: rgba(209, 73, 91, 0.12);
+  stroke: rgba(209, 73, 91, 0.6);
+  stroke-width: 1;
+}
+
+.profile-measure-text {
+  font-size: 11px;
+  font-weight: 700;
+  fill: #6a1f29;
+}
+
+.profile-measure-dot {
+  fill: #d1495b;
+  stroke: #fff;
+  stroke-width: 1.2;
+}
+
+
+.profile-hover-map-marker {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #d62828;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(214, 40, 40, 0.22);
+  pointer-events: none;
+}
