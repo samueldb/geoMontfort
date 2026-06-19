@@ -728,6 +728,17 @@ const Map = forwardRef(function Map(
     });
   }, []);
 
+  const clearProfileCut = useCallback(() => {
+    lastProfileRequestRef.current = null;
+    profileComputationIdRef.current += 1;
+    setProfileCutPoints([]);
+    setProfileResult(null);
+    setProfileMeasure(null);
+    profileHoverMarkerRef.current?.remove();
+    profileHoverMarkerRef.current = null;
+    updateProfileGuide(mapRef.current, [], profileBufferMetersRef.current, null);
+  }, [updateProfileGuide]);
+
   const computeProfile = useCallback(async (cutPoints, bufferMeters) => {
     if (cutPoints.length !== 2) {
       lastProfileRequestRef.current = null;
@@ -971,10 +982,8 @@ const Map = forwardRef(function Map(
       return;
     }
     setProfileToolActive(false);
-    setProfileMeasure(null);
-    profileHoverMarkerRef.current?.remove();
-    profileHoverMarkerRef.current = null;
-  }, [showLidarProfileCard]);
+    clearProfileCut();
+  }, [clearProfileCut, showLidarProfileCard]);
 
   useEffect(() => {
     syncStaticLayersRef.current = syncStaticLayers;
@@ -1241,18 +1250,21 @@ const Map = forwardRef(function Map(
           </div>
           <button
             className={profileToolActive ? 'profile-tool-button active' : 'profile-tool-button'}
-            onClick={() => setProfileToolActive((current) => !current)}
+            onClick={() => {
+              if (profileToolActive) {
+                setProfileToolActive(false);
+                clearProfileCut();
+                return;
+              }
+              setProfileToolActive(true);
+            }}
             type='button'
           >
             {profileToolActive ? 'Mode coupe actif' : 'Activer la coupe'}
           </button>
           <button
             className='profile-tool-button secondary'
-            onClick={() => {
-              lastProfileRequestRef.current = null;
-              setProfileCutPoints([]);
-              setProfileResult(null);
-            }}
+            onClick={clearProfileCut}
             type='button'
           >
             Réinitialiser

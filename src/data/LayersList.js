@@ -7,7 +7,6 @@ export const landscapesLayers = [
     {name: 'hydro', displayable_name: 'Hydrologie', categorie: 'landscapes'},
     {name: 'forest', displayable_name: 'Carte forestière', categorie: 'landscapes'},
     {name: 'mnt', displayable_name: 'Modèle de Terrain (MNT)', categorie: 'landscapes'},
-    {name: 'lidar', displayable_name: 'LIDAR (COPC)', categorie: 'landscapes'},
     {name: 'bati_3d', displayable_name: 'Batiments 3D', categorie: 'landscapes'},
     {name: 'carte_moderne', displayable_name: 'Carte moderne', categorie: 'landscapes'}
 ]
@@ -20,4 +19,3 @@ export const historicalLayers = [
 ]
 
 export const allLayers = adminLayers.concat(historicalLayers, landscapesLayers)
-

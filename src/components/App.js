@@ -47,7 +47,7 @@ function App() {
       allLayers.reduce((acc, layer) => {
         acc[layer.name] = layer.name === 'carte_moderne';
         return acc;
-      }, {}),
+      }, { lidar: false }),
     []
   );
 
